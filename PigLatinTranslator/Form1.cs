@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -58,7 +59,12 @@ namespace PigLatinTranslator
                 word = word.Remove(word.Length - 1, 1);
             }
 
-            word = TranslateWord(word);
+            if (IsInitialCap(word))
+                word = ToInitailCap(TranslateWord(word));
+            if (IsUpper(word))
+                word = TranslateWord(word).ToUpper();
+            if (IsLower(word))
+                word += TranslateWord(word).ToLower();  
             word += punct;
              
             return word;
@@ -92,8 +98,60 @@ namespace PigLatinTranslator
                 word += "ay";
             }
 
-
             return word;
+
+        }
+
+        private bool IsUpper(string word)
+        {
+            for (int i = 0; i < word.Length; i++)
+            {
+                if (IsUpper(word[i]) == false)
+                        return false;
+            }
+            return true;
+        }
+
+        private bool IsLower(string word)
+        {
+            for (int i = 0; i < word.Length; i++)
+            {
+                if (IsUpper(word[i]) == false)
+                    return false;
+            }
+            return true;
+        }
+
+        private bool IsInitialCap(string word)
+        {
+            char firstLetter = word[0];
+            string otherletters = word.Remove(0 , 1);
+            if (IsUpper(firstLetter) && IsLower(otherletters))
+                return true;
+            return false;
+        }
+
+        private bool IsUpper(char c)
+        {
+            if (c >= 65 && c <= 90 || c.ToString() == "'")
+                return true; 
+            else 
+                return false;
+        }
+
+        private bool IsLower(char c)
+        {
+            if (c >= 97 && c <= 122 || c.ToString() == "'")
+                return true;
+            else
+                return false;
+        }
+
+        private string ToInitailCap(string word)
+        {
+            string firstLetter = word.Substring(0, 1).ToUpper ();
+            string otherLetters = word.Substring(1).ToLower();
+            return firstLetter + otherLetters;
         }
     }
 }
