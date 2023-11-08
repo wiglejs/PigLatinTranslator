@@ -27,5 +27,18 @@ namespace PigLatinTranslator
             txt_english.Text = "";
             txt_piglatin.Text = "";
         }
+
+        private void btnTranslate_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(txt_english.Text)) 
+            { 
+                //follow rules
+            }
+            else
+            {
+                MessageBox.Show("You must enter text.", "Enter");
+                txt_english.Focus();
+            }
+        }
     }
 }
